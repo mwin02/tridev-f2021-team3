@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import SmallPost from "./SmallPost";
-
+import { Container, Row, Col } from "react-bootstrap";
 const samplePost = {
   id: 123123124124,
   username: "Rediablack",
@@ -16,7 +16,15 @@ const PostList = () => {
   const fetchPosts = useCallback(async (numPosts) => {
     setLoading(true);
 
-    setPosts([samplePost, samplePost, samplePost]);
+    setPosts([
+      samplePost,
+      samplePost,
+      samplePost,
+      samplePost,
+      samplePost,
+      samplePost,
+      samplePost,
+    ]);
     setLoading(false);
   }, []);
 
@@ -29,16 +37,22 @@ const PostList = () => {
   }
 
   return (
-    <main>
+    <Container fluid>
+      <h2>Posts</h2>
       {posts.map((post, index) => {
         console.log(post);
         return (
-          <Link to={`post/${post.id}`}>
-            <SmallPost {...post} key={index} />
-          </Link>
+          <Row key={index}>
+            <Link
+              to={`post/${post.id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <SmallPost {...post} />
+            </Link>
+          </Row>
         );
       })}
-    </main>
+    </Container>
   );
 };
 
