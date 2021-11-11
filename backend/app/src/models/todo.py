@@ -52,3 +52,11 @@ class ToDo(db.Model):
     @staticmethod
     def get(user_id: int) -> [ToDo]:
         return ToDo.query.filter_by(user_id=user_id).all()
+
+    @staticmethod
+    def getAll() -> [ToDo]:
+        return ToDo.query.all()
+
+    @staticmethod
+    def getCategory(category: str) -> [ToDo]:
+        return ToDo.query.filter_by(category=category).all()

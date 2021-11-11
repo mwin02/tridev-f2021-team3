@@ -60,3 +60,20 @@ def get():
     # Generate JSON response
     return jsonify({'reason': 'todo\'s retrieved for %s' % name,
                     'result': todos}), 200
+
+@todo_api.route('/get/all', methods=['GET', 'POST'])
+def getAll():
+    todos = ToDo.getAll()
+    todos = [todo.to_json() for todo in todos]
+
+    # Generate JSON response
+    return jsonify({'result': todos}), 200
+
+@todo_api.route('/get/category', methods=['GET', 'POST'])
+def getCategory():
+    category = request.args.get('category', type=str)
+    todos = ToDo.getCategory(category=category)
+    todos = [todo.to_json() for todo in todos]
+
+    # Generate JSON response
+    return jsonify({'result': todos}), 200
