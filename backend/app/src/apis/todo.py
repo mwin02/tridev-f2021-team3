@@ -12,6 +12,7 @@ from flask import Blueprint, request, jsonify
 # Import ToDo and User model
 from ..models.todo import ToDo
 from ..models.user import User
+from ..models.todo import JoinRequest
 
 # Create the blueprint
 todo_api = Blueprint('todo_api', __name__)
@@ -77,3 +78,31 @@ def getCategory():
 
     # Generate JSON response
     return jsonify({'result': todos}), 200
+
+@todo_api.route('/join/request', methods=['GET','POST'])
+def join():
+    # Get ID of user todo is for and description of to do from body
+    postId = int(request.json['postId'])
+    name = request.json['name']
+    description = request.json['description']
+    contact = request.json['contact']
+
+    # Call ToDo model method to add todo
+    todo = JoinRequest.requestToJoin(postId=postId, name=name, description=description, contact=contact)
+    # Generate JSON response
+    return jsonify({'Status': 'Successfully requested for %s' % postId,
+                    'Join Request': todo.to_json()}), 200
+
+@todo_api.route('/post/requests', methods=['GET'])
+def getJoinRequestsById():
+    postId = request.args.get('postId', type=int)
+    requests = JoinRequest.getJoinRequests(postId=postId)
+    requests = [request.to_json() for request in requests]
+    # Generate JSON response
+    return jsonify({'result': requests}), 200
+
+@todo_api.route('/post/accept', methods=['GET', 'POST'])
+def acceptJoinRequest():
+    requestId = request.args.get('id', type=int)
+    requests = JoinRequest.acceptJoinRequest(id=requestId)
+    return ({'accepted join request id:' : requestId})

@@ -3,7 +3,6 @@ from __future__ import annotations
 # Imports reference to our database from setup.py
 from ...setup import db
 
-
 class ToDo(db.Model):
     __tablename__ = 'ToDo'  # Name of the table associated with model
     # Fields of an entry
@@ -60,3 +59,53 @@ class ToDo(db.Model):
     @staticmethod
     def getCategory(category: str) -> [ToDo]:
         return ToDo.query.filter_by(category=category).all()
+
+    @staticmethod
+    def join(postId: int, name: str, description: str, contact: str) -> [ToDo]:
+        return JoinRequest.requestToJoin(postId=postId, name=name, description=description, contact=contact)
+
+    @staticmethod
+    def getJoinRequests(postId: int) -> [ToDo]:
+        return JoinRequest.query.filter_by(postId=postId).all()
+
+class JoinRequest(db.Model):  
+    __tablename__ = 'JoinRequest'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    postId = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    contact = db.Column(db.String(255), nullable=False)
+
+    def save(self) -> None:
+        db.session.commit()
+
+    def to_json(self) -> [str, str]:
+        to_return = {}  
+        to_return['id'] = self.id
+        to_return['postId'] = self.postId
+        to_return['name'] = self.name
+        to_return['description'] = self.description
+        to_return['contact'] = self.contact
+        return to_return
+
+    @staticmethod
+    def requestToJoin(postId: int, name: str, description: str, contact: str) -> [JoinRequest]:
+        joinRequests = JoinRequest(postId=postId, name=name, description=description, contact=contact)
+        db.session.add(joinRequests)
+        joinRequests.save()
+        return joinRequests
+
+    @staticmethod
+    def getJoinRequests(postId: int) -> [JoinRequest]:
+        return JoinRequest.query.filter_by(postId=postId)
+
+    @staticmethod
+    def acceptJoinRequest(id: int) -> [JoinRequest]:
+        requests = JoinRequest.query.filter_by(id=id).first()
+        post = ToDo.query.filter_by(id=requests.postId).first()
+        post.groupSize=post.groupSize + 1
+        post.peopleWanted=post.peopleWanted - 1
+        post.save()
+        JoinRequest.query.filter_by(id=id).delete()
+        requests.save()
+        return
