@@ -1,0 +1,7 @@
+# File name: .dockerignore
+# Author: Queues Team
+# Description: Includes the files to be ignored by Docker.
+
+.git
+__pycache__
+venv/

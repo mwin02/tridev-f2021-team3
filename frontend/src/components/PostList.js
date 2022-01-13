@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import SmallPost from "./SmallPost";
 import { Container, Row, Col } from "react-bootstrap";
+import axios from "axios";
+
 const samplePost = {
   id: 123123124124,
   username: "Rediablack",
@@ -15,7 +17,7 @@ const PostList = () => {
   // setPosts(["Post 1", "Post 2", "Post 3"]);
   const fetchPosts = useCallback(async (numPosts) => {
     setLoading(true);
-
+    // const data = axios.get();
     setPosts([
       samplePost,
       samplePost,

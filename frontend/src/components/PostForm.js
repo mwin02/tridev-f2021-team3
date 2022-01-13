@@ -5,6 +5,8 @@ import { Card, Container, Button } from "react-bootstrap";
 
 const options = ["Looking for Group", "Looking for Members"];
 
+//useReducer
+
 const PostForm = () => {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("lfg");
