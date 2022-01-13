@@ -47,4 +47,8 @@ class User(db.Model):
         query = User.query.filter_by(id=id).all()
 
         # Take the first element of the array returned (there should only be 1)
+<<<<<<< HEAD
         return query[0]
+=======
+        return query[0]
+>>>>>>> ed3d7593fbb284b611de65be413cc5b73dcc273b
